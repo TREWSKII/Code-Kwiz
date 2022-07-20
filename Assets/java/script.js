@@ -7,7 +7,7 @@ let questionText = document.querySelector("#question")
 let answers = document.querySelector('#answers')
 //! NEED SOME MROE GD VARIBLES FOR THE GAME/SCORE
 
-let currentQuestions = 0;
+let currentQuestion = 0;
 let score = 0;
 let timeleft = 60;
 let time;
@@ -64,43 +64,66 @@ function startGame() {
 
 
         if (timeleft <= 0) {
+            //clock stops at zero
+            clearInterval(time)
             endGame();
         }
     }, 1000)
     // calling the functions
-   rendersQuestions();
+    rendersQuestions();
 
 
 }
 //defining the function
 function rendersQuestions() {
-questionText.textContent = question[currentQuestion].questionText
-for (let i = 0; i < question[currentQuestion].options.length; i++) {
-    var answerButton = document.createElement("button")
-    answerButton.textContent = question[currentQuestion].options[i];
-    answers.append(answerButton)
-}}
-
-//! add and eventListener so that when a user clicks a choice the current question counter goes up by one. and we call the renders question function. 
- answers.addEventListene("click", function(){
-    
- })
-
+    answers.innerHTML = ""
+    questionText.textContent = question[currentQuestion].questionText
+    for (let i = 0; i < question[currentQuestion].options.length; i++) {
+        var answerButton = document.createElement("button")
+        answerButton.textContent = question[currentQuestion].options[i];
+        answers.append(answerButton)
+    }
+}
 //TODO: after the first question we need to presented with the next, so on and so forth....
 //question.classList.showQuestion();
 
+//! add and eventListener so that when a user clicks a choice the current question counter goes up by one. and we call the renders question function. 
+answers.addEventListener("click", function (event) {
+    var answerQuestions = event.target.textContent
+    if (currentQuestion <= question.length +1) {
 
-//TODO: when a question is answered incorrectly 15 seconds is subtracted from the clock
-// ! if you google the function .getTime it subtracts 15 seconds from the inccorect question
+        if (question[currentQuestion].correctAnswer === answerQuestions) {
+            currentQuestion++
+            rendersQuestions()
+        }
+        else {
+            //TODO: when a question is answered incorrectly 15 seconds is subtracted from the clock
+            // ! if you google the function .getTime it subtracts 15 seconds from the inccorect question
+            timeleft = timeleft - 15
+            currentQuestion++
+            rendersQuestions()
+            console.log("you suck!")
+        }
+
+    }
+    else {endGame()}
+});
 
 
 
 //TODO:all questions are answered or the timer reaches 0 - THEN the game is over
+function endGame() {
+    questionText.textContent = ""
+    answers.style.display = "none";
+
+};
 
 
 
 //TODO: then i save my initals and score - 
-
+//activity 24 and 26 in module 4 for the refernce for this. 
+//snapshot the score create a new varible called snapshot squore so as soon as the game ends we can set snap shot score = to the tim left. 
+//that timer man
 
 
 
